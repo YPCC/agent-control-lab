@@ -1,0 +1,43 @@
+# Agent Control Lab configuration
+llm:
+  provider: "xai"
+  fallback_order: ["xai", "openai", "google", "mock"]
+  xai:
+    model: "grok-4"
+    base_url: "https://api.x.ai/v1"
+  openai:
+    model: "gpt-4o-mini"
+    base_url: ""
+  google:
+    backend: genai
+    model: "gemini-2.5-flash"
+    project: ""
+    location: "us-central1"
+    credentials_file: ""
+
+agent:
+  id: "rdf-knowledge-agent-01"
+
+critic:
+  id: "rdf-critic-agent-01"
+  allow: [validate_rdf, critique_rdf, list_artifacts, read_artifact]
+  deny: [generate_rdf_kg, create_rdf_infographic, delete_file, execute_code, shell, send_email]
+
+compliance:
+  id: "compliance"
+
+governance:
+  allow: [generate_rdf_kg, validate_rdf, create_rdf_infographic, list_artifacts, critique_rdf, read_artifact, compliance_verdict, web_search, summarize]
+  deny: [delete_file, execute_code, shell, send_email, write_system_file, ssh_connect, drop_table, rm_rf]
+  max_calls: 50
+  audit_log: "output/governance_audit.jsonl"
+  events_log: "output/governance_events.jsonl"
+  acs_manifest: "policies/acs_manifest.yaml"
+
+artifacts:
+  output_dir: "output"
+  default_slug: "agt-demo"
+
+langfuse:
+  enabled: true
+  host: "https://cloud.langfuse.com"

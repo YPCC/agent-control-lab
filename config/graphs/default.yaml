@@ -1,0 +1,17 @@
+apiVersion: agent-control-lab/v1
+kind: AgentGraph
+metadata:
+  id: default
+  name: Knowledge to Critic to Compliance
+spec:
+  entry: knowledge
+  exit: __end__
+  nodes:
+    - {id: knowledge, agent: knowledge}
+    - {id: critic, agent: critic}
+    - {id: compliance, agent: compliance}
+  edges:
+    - {from: knowledge, to: critic}
+    - {from: critic, to: compliance}
+    - {from: compliance, to: __end__}
+  state: [user_text, ttl_path, critique_summary, compliance_verdict, agent_results]

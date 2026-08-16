@@ -1,0 +1,21 @@
+apiVersion: agent-control-lab/v1
+kind: AgentSpec
+metadata:
+  id: knowledge
+  name: Knowledge Agent
+  description: Generates RDF Knowledge Graphs and interactive HTML explorers
+  version: "1.0.0"
+  tags: [generator, rdf, workload]
+spec:
+  role: generator
+  llm: {inherit: true}
+  governance:
+    allow: [generate_rdf_kg, validate_rdf, create_rdf_infographic, list_artifacts, web_search, summarize]
+    deny: [delete_file, execute_code, shell, send_email, write_system_file, ssh_connect, drop_table, rm_rf]
+  tools: [generate_rdf_kg, validate_rdf, create_rdf_infographic, list_artifacts, delete_file]
+  runtime:
+    module: agt_demo.agents.knowledge_agent
+    build: build_knowledge_graph
+    run: run_knowledge_agent
+  system_prompt: |
+    You are a governed RDF Knowledge Agent. Use tools. Refuse destructive actions.

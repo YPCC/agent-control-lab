@@ -1,0 +1,33 @@
+agent_control_specification_version: "0.3.1-beta"
+metadata:
+  name: rdf-governance-demo
+  version: "0.2.0"
+extends: []
+policies:
+  rdf_rules:
+    type: rego
+    bundle: rego
+    query: data.agt.demo.rdf.result
+intervention_points:
+  pre_tool_call:
+    policy_target: $.tool_call.args
+    policy_target_kind: tool_args
+    tool_name_from: $.tool_call.name
+    policy: {id: rdf_rules}
+  input:
+    policy_target: $.input.body
+    policy: {id: rdf_rules}
+  output:
+    policy_target: $.response.content
+    policy: {id: rdf_rules}
+tools:
+  generate_rdf_kg: {clearance: internal}
+  validate_rdf: {clearance: internal}
+  create_rdf_infographic: {clearance: internal}
+  critique_rdf: {clearance: internal}
+  list_artifacts: {clearance: internal}
+  read_artifact: {clearance: internal}
+  compliance_verdict: {clearance: internal}
+  delete_file: {clearance: denied}
+  execute_code: {clearance: denied}
+  shell: {clearance: denied}

@@ -1,0 +1,3 @@
+name: agent-control-lab-demo
+allow: [generate_rdf_kg, validate_rdf, create_rdf_infographic, list_artifacts, critique_rdf, read_artifact, compliance_verdict]
+deny: [delete_file, execute_code, shell, send_email]

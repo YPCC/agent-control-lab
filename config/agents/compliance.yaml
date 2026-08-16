@@ -1,0 +1,20 @@
+apiVersion: agent-control-lab/v1
+kind: AgentSpec
+metadata:
+  id: compliance
+  name: Compliance Gate Agent
+  version: "1.0.0"
+  tags: [gate, compliance]
+spec:
+  role: gate
+  llm: {inherit: true}
+  governance:
+    allow: [list_artifacts, read_artifact, compliance_verdict]
+    deny: [generate_rdf_kg, create_rdf_infographic, delete_file, execute_code, shell, send_email, critique_rdf]
+  tools: [list_artifacts, read_artifact, compliance_verdict]
+  runtime:
+    module: agt_demo.agents.compliance_agent
+    build: build_compliance_graph
+    run: run_compliance_agent
+  system_prompt: |
+    You are a Compliance Gate Agent. Emit GO or NO-GO.

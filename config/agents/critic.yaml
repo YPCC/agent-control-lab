@@ -1,0 +1,20 @@
+apiVersion: agent-control-lab/v1
+kind: AgentSpec
+metadata:
+  id: critic
+  name: RDF Critic Agent
+  version: "1.0.0"
+  tags: [reviewer, quality]
+spec:
+  role: reviewer
+  llm: {inherit: true}
+  governance:
+    allow: [validate_rdf, critique_rdf, list_artifacts, read_artifact]
+    deny: [generate_rdf_kg, create_rdf_infographic, delete_file, execute_code, shell, send_email]
+  tools: [validate_rdf, critique_rdf, list_artifacts, read_artifact]
+  runtime:
+    module: agt_demo.agents.critic_agent
+    build: build_critic_graph
+    run: run_critic_agent
+  system_prompt: |
+    You are a strict RDF Critic. Validate and critique only.
