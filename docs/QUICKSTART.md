@@ -1,8 +1,9 @@
 # Quick start — Agent Control Lab
 
-## 1. Environment
+## Install
 
 ```bash
+git clone https://github.com/YPCC/agent-control-lab.git
 cd agent-control-lab
 bash scripts/setup_uv.sh
 source .venv/bin/activate
@@ -10,44 +11,28 @@ source .venv/bin/activate
 
 CLI: `agent-control-lab` or `acl`.
 
-## 2. Credentials (optional)
-
-| Variable | Purpose |
-|----------|---------|
-| `XAI_API_KEY` | Grok |
-| `OPENAI_API_KEY` | OpenAI / compatible |
-| `GOOGLE_API_KEY` | Gemini API |
-| `GOOGLE_APPLICATION_CREDENTIALS` + `GOOGLE_CLOUD_PROJECT` | Vertex ADC |
-| `LANGFUSE_PUBLIC_KEY` + `LANGFUSE_SECRET_KEY` | Tracing |
-| `LANGFUSE_HOST` | Langfuse endpoint |
-
-No keys → mock LLM; governance and the 7-layer hooks still run.
-
-## 3. Run
+## Run
 
 ```bash
 agent-control-lab
 ```
 
-Expect: 7-layer banner → agent registry → knowledge → critic → compliance → `VERDICT: GO`.
-
-## 4. See the 7 AGT layers
-
-| Layer | Signal |
-|-------|--------|
-| Agent OS | `[GOVERNANCE] ALLOWED` / `BLOCKED` |
-| Agent Mesh | `did:acl:…` / trust score |
-| Agent Runtime | Destructive tools denied |
-| Agent SRE | Success / circuit helpers |
-| Agent Compliance | `VERDICT: GO` |
-| Agent Marketplace | Signed tool catalog |
-| Agent Lightning | Documented only (training-time) |
-
-Details: [AGT_SEVEN_LAYERS.md](AGT_SEVEN_LAYERS.md)
-
-## 5. Dashboards
+## SRE circuit
 
 ```bash
-streamlit run dashboards/companion_app.py --server.port 8502
-bash scripts/launch_official_dashboard.sh
+agent-control-lab --sre-reset
+agent-control-lab --sre-demo   # repeat until CIRCUIT OPEN
+agent-control-lab              # blocked
+agent-control-lab --sre-reset
 ```
+
+State: `output/sre_state.json`
+
+## Marketplace language
+
+Tools show **fingerprints** and trust labels (`catalogued` / `unknown`). These are not Ed25519 signatures.
+
+## Docs
+
+- [AGT_SEVEN_LAYERS.md](AGT_SEVEN_LAYERS.md) — honest status table
+- [ADDING_AGENTS.md](ADDING_AGENTS.md) — extend the graph
