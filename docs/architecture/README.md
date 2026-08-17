@@ -13,11 +13,13 @@ Agent Control Lab separates **agent execution** from **agent governance**.
 
 ## Diagram
 
-![C4 context, container, and 7-layer AGT concept map](c4-and-seven-layer-map.jpg)
+![C4 context, container, and 7-layer AGT concept map](c4-and-seven-layer-map.svg)
 
 1. **C4 context** — developer/researcher, Agent Control Lab, LLM providers, Microsoft AGT (ACS), Langfuse  
 2. **C4 container** — specification layer, orchestrator, execution agents, governance control plane, runtime artifacts  
 3. **Logical 7-layer map** — status tags (Integrated / Projected / Partial / Illustrative / Reference only) over the workflow  
+
+The full multi-panel C4 raster used in design reviews lives as `c4-and-seven-layer-map.jpg` (optional; add via GitHub UI if not present).
 
 ## Related
 
