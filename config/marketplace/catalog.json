@@ -1,0 +1,55 @@
+{
+  "schema": "acl-marketplace-catalog-v1",
+  "signed_at": "2026-08-17T00:14:26.740711+00:00",
+  "tools": [
+    {
+      "name": "generate_rdf_kg",
+      "version": "1.0",
+      "fingerprint": "62848fc20106e7d5",
+      "signature_b64": "/CTL7vmRsrhTWwkTO70KShWDdQoBKm90zBzvN7TmI2bvkM7PWbBMOTtQRcWfwh7+s0iv7Dbz37uELMKRJs9JAw==",
+      "trust_tier": "catalogued"
+    },
+    {
+      "name": "validate_rdf",
+      "version": "1.0",
+      "fingerprint": "40da7ad185985dc6",
+      "signature_b64": "bnepLNw/Z8eImfLoU6sFSZbRTJUWWlcQonP3ounL7wuDs0o6c/BSRUmJorbsLfqVOD6xZZdRYFK+om2P5S62Dg==",
+      "trust_tier": "catalogued"
+    },
+    {
+      "name": "create_rdf_infographic",
+      "version": "1.0",
+      "fingerprint": "5d5e21f8e8092e97",
+      "signature_b64": "VVD1XPavAZsOgfILdBxNTiutMM6xzQL0XtBe4Zq6Mx/DKexTQp/ZcxRxNwPbYhspHoB+EMiMlTlwVcDGtoLfAQ==",
+      "trust_tier": "catalogued"
+    },
+    {
+      "name": "critique_rdf",
+      "version": "1.0",
+      "fingerprint": "86ab4231ccfc6816",
+      "signature_b64": "m2OP9JzMK+3sZMvUclDDok+o0f0EqlSvVW22RW7YgnfltqStX2DfA6E3HvzGsZpOOIXqqGIWNvdxNd9cUosdAQ==",
+      "trust_tier": "catalogued"
+    },
+    {
+      "name": "list_artifacts",
+      "version": "1.0",
+      "fingerprint": "8dc6eee7b5eca997",
+      "signature_b64": "/xIZsD5BkSGG7H9RvyE4G+tCZVC9OKZ9yt06X9gnsBBa+iM0GOS7KXLex30YkfbUiFW379XkKFfH0WnRnIW9CA==",
+      "trust_tier": "catalogued"
+    },
+    {
+      "name": "read_artifact",
+      "version": "1.0",
+      "fingerprint": "103ec2d10dc134f5",
+      "signature_b64": "M3FfzZhDAEICZJUOiMtzwHcZqMKikR7PSnEm/IuYfhys/pK4siFNDifTRN1lUyXGZM2wzuQmTlwSudUTJBlMBw==",
+      "trust_tier": "catalogued"
+    },
+    {
+      "name": "compliance_verdict",
+      "version": "1.0",
+      "fingerprint": "8699d56f610a8b23",
+      "signature_b64": "Zmg1rdyPeWkTGlNPgRqGmgjLLwF7vawPjoE5L+ysn06LPqN5nwNR50brKnKt9nfLocCVGlv7hnFsle3vnRgqAQ==",
+      "trust_tier": "catalogued"
+    }
+  ]
+}
