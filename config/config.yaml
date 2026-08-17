@@ -1,6 +1,6 @@
 # Agent Control Lab configuration
 llm:
-  provider: "xai"
+  provider: "xai"   # xai | openai | google | mock
   fallback_order: ["xai", "openai", "google", "mock"]
   xai:
     model: "grok-4"
@@ -9,7 +9,7 @@ llm:
     model: "gpt-4o-mini"
     base_url: ""
   google:
-    backend: genai
+    backend: genai   # genai | vertex
     model: "gemini-2.5-flash"
     project: ""
     location: "us-central1"
@@ -20,23 +20,64 @@ agent:
 
 critic:
   id: "rdf-critic-agent-01"
-  allow: [validate_rdf, critique_rdf, list_artifacts, read_artifact]
-  deny: [generate_rdf_kg, create_rdf_infographic, delete_file, execute_code, shell, send_email]
+  allow:
+    - validate_rdf
+    - critique_rdf
+    - list_artifacts
+    - read_artifact
+  deny:
+    - generate_rdf_kg
+    - create_rdf_infographic
+    - delete_file
+    - execute_code
+    - shell
+    - send_email
 
 compliance:
   id: "compliance"
 
 governance:
-  allow: [generate_rdf_kg, validate_rdf, create_rdf_infographic, list_artifacts, critique_rdf, read_artifact, compliance_verdict, web_search, summarize]
-  deny: [delete_file, execute_code, shell, send_email, write_system_file, ssh_connect, drop_table, rm_rf]
+  allow:
+    - generate_rdf_kg
+    - validate_rdf
+    - create_rdf_infographic
+    - list_artifacts
+    - critique_rdf
+    - read_artifact
+    - compliance_verdict
+    - web_search
+    - summarize
+  deny:
+    - delete_file
+    - execute_code
+    - shell
+    - send_email
+    - write_system_file
+    - ssh_connect
+    - drop_table
+    - rm_rf
   max_calls: 50
   audit_log: "output/governance_audit.jsonl"
   events_log: "output/governance_events.jsonl"
   acs_manifest: "policies/acs_manifest.yaml"
 
+# Agent Runtime projection — privilege rings + kill switch
+runtime:
+  # When true (or AGT_KILL_SWITCH=1), all tool calls are denied
+  kill_switch: false
+  max_ring: 2
+
+# Agent Marketplace projection — fingerprints always; Ed25519 when keys present
+marketplace:
+  # If true and keys/catalog present: refuse tools that fail signature verify
+  enforce: false
+  keys_dir: "config/marketplace/keys"
+  catalog_path: "config/marketplace/catalog.json"
+
 artifacts:
   output_dir: "output"
   default_slug: "agt-demo"
+  compliance_evidence: "output/compliance_evidence.json"
 
 langfuse:
   enabled: true

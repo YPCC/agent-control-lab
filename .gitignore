@@ -16,3 +16,9 @@ docs/recordings/**
 !docs/recordings/.gitkeep
 .env
 *.pem
+
+# Marketplace Ed25519 private key (never commit)
+config/marketplace/keys/*_private*
+config/marketplace/keys/*.pem
+!config/marketplace/keys/*.pub
+!config/marketplace/keys/ed25519_public.pem
