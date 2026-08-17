@@ -11,26 +11,59 @@ Upstream blog: [Introducing the Agent Governance Toolkit](https://opensource.mic
 
 ---
 
+## Cite this repository
+
+If you use **Agent Control Lab** in a paper, talk, course, or product evaluation, please cite:
+
+### BibTeX
+
+```bibtex
+@software{agent_control_lab,
+  title        = {Agent Control Lab: Spec-driven LangGraph control plane for AGT concept demos},
+  author       = {{Agent Control Lab Contributors}},
+  year         = {2026},
+  url          = {https://github.com/YPCC/agent-control-lab},
+  note         = {Lab projections of Microsoft Agent Governance Toolkit concepts}
+}
+```
+
+### APA-style
+
+> Agent Control Lab Contributors. (2026). *Agent Control Lab: Spec-driven LangGraph control plane for AGT concept demos* [Computer software]. https://github.com/YPCC/agent-control-lab
+
+### Inline
+
+> …using the open-source Agent Control Lab control-plane demo (https://github.com/YPCC/agent-control-lab).
+
+Please also cite Microsoft’s AGT when discussing the upstream architecture:
+
+> Microsoft. (2026). *Introducing the Agent Governance Toolkit*. https://opensource.microsoft.com/blog/2026/04/02/introducing-the-agent-governance-toolkit-open-source-runtime-security-for-ai-agents/
+
+---
+
 ## What this lab is (and is not)
 
 | Primary claims | Status |
 |----------------|--------|
 | Spec-driven LangGraph workflow (`knowledge → critic → compliance`) | **Real** |
 | ACS / LiteGovernor policy mediation on tool calls + host enforcement + audit | **Integrated** |
-| Mesh, Runtime, SRE, Marketplace, Compliance as teaching projections | **Projected / partial** |
+| Runtime kill switch + rings wired into `check_policy` | **Partial** |
+| Persistent SRE circuit breaker | **Partial** |
+| Audit → OWASP evidence JSON | **Illustrative** |
+| Marketplace fingerprints + optional Ed25519 verify | **Projected** |
 | Full Microsoft AGT monorepo (Mesh crypto, Hypervisor, Lightning RL, …) | **Out of scope** |
 
 ### AGT concept map
 
 | AGT concept | Status in Agent Control Lab |
 |-------------|----------------------------|
-| **Agent OS / ACS** | **Integrated** — LiteGovernor + optional ACS at `PRE_TOOL_CALL`; host enforces via `PermissionError` |
-| **Agent Mesh** | **Projected** — deterministic `did:acl:…` identities and trust tiers (not Ed25519 Mesh) |
-| **Agent Runtime** | **Partial** — privilege-ring map + kill-switch helper (not a hypervisor/sandbox) |
-| **Agent SRE** | **Partial** — persistent success window, error budget, circuit breaker across runs |
-| **Agent Compliance** | **Illustrative** — GO/NO-GO agent + light OWASP Agentic evidence mapping |
-| **Agent Marketplace** | **Projected** — tool catalog with **fingerprints** and trust labels (not cryptographic signing) |
-| **Agent Lightning** | **Reference only** — training-time counterpart; not implemented in this runtime lab |
+| **Agent OS / ACS** | **Integrated** — RuntimeGuard → LiteGovernor → optional ACS; host enforces |
+| **Agent Mesh** | **Projected** — `did:acl:…` + trust tiers |
+| **Agent Runtime** | **Partial** — rings + kill switch (`--kill-switch` / `AGT_KILL_SWITCH`) |
+| **Agent SRE** | **Partial** — `output/sre_state.json` + `--sre-demo` |
+| **Agent Compliance** | **Illustrative** — GO/NO-GO + `output/compliance_evidence.json` |
+| **Agent Marketplace** | **Projected** — fingerprints; optional Ed25519 (`--marketplace-init`) |
+| **Agent Lightning** | **Reference only** |
 
 ---
 
@@ -64,25 +97,45 @@ source .venv/bin/activate
 agent-control-lab          # or: acl
 ```
 
-### SRE circuit demo
+Baseline run is unchanged: governance allow/deny, RDF artifacts, audit JSONL, companion dashboard.
 
-State is persisted in `output/sre_state.json` across runs:
+### Additive demos (optional)
 
-```bash
-# Normal run records success/failure
-agent-control-lab
+Full detail: [docs/RUNTIME_MARKETPLACE_COMPLIANCE.md](docs/RUNTIME_MARKETPLACE_COMPLIANCE.md)
 
-# Force failures until the circuit opens, then block
-agent-control-lab --sre-demo
-# or: python scripts/run_demo.py --sre-demo
-```
-
-When the circuit is open, subsequent runs refuse the pipeline until you reset:
+**SRE circuit**
 
 ```bash
 agent-control-lab --sre-reset
-# or: rm output/sre_state.json
+agent-control-lab --sre-demo    # repeat until CIRCUIT OPEN
+agent-control-lab               # blocked
+agent-control-lab --sre-reset
 ```
+
+**Runtime kill switch**
+
+```bash
+agent-control-lab --kill-switch
+# or: AGT_KILL_SWITCH=1 agent-control-lab
+```
+
+**Compliance evidence** (written every successful orchestration)
+
+```bash
+agent-control-lab
+cat output/compliance_evidence.json
+```
+
+**Marketplace Ed25519**
+
+```bash
+agent-control-lab --marketplace-init      # keys + signed catalog
+agent-control-lab --marketplace-tamper
+agent-control-lab --marketplace-enforce   # should reject
+agent-control-lab --marketplace-sign      # restore
+```
+
+Default `marketplace.enforce: false` keeps older demos intact.
 
 ### Dashboards
 
@@ -102,26 +155,13 @@ agent-control-lab
 
 ---
 
-## How to read the 7-layer hooks
-
-| Layer | What you will actually see |
-|-------|----------------------------|
-| Agent OS | `[GOVERNANCE] ALLOWED` / `BLOCKED` — LiteGovernor (+ ACS evaluate) before tools |
-| Agent Mesh | `did:acl:…` + trust tier events (simulation) |
-| Agent Runtime | Destructive tools mapped to ring 0 and denied |
-| Agent SRE | `output/sre_state.json`, circuit open after repeated failures (`--sre-demo`) |
-| Agent Compliance | `VERDICT: GO` / `NO-GO` from the compliance agent |
-| Agent Marketplace | Tool **fingerprints** + trust labels at orchestrator start |
-| Agent Lightning | Documented training-time boundary only |
-
----
-
 ## Documentation
 
 | Doc | Topic |
 |-----|--------|
 | [docs/QUICKSTART.md](docs/QUICKSTART.md) | First run |
 | [docs/AGT_SEVEN_LAYERS.md](docs/AGT_SEVEN_LAYERS.md) | Honest 7-layer map |
+| [docs/RUNTIME_MARKETPLACE_COMPLIANCE.md](docs/RUNTIME_MARKETPLACE_COMPLIANCE.md) | Kill switch, evidence, Ed25519 |
 | [docs/ADDING_AGENTS.md](docs/ADDING_AGENTS.md) | Spec-driven agents |
 | [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | Providers, env vars |
 

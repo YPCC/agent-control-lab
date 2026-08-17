@@ -11,28 +11,33 @@ source .venv/bin/activate
 
 CLI: `agent-control-lab` or `acl`.
 
-## Run
+## Baseline demo (unchanged)
 
 ```bash
 agent-control-lab
 ```
 
-## SRE circuit
+## Additive demos
+
+See [RUNTIME_MARKETPLACE_COMPLIANCE.md](RUNTIME_MARKETPLACE_COMPLIANCE.md).
 
 ```bash
+# SRE circuit
 agent-control-lab --sre-reset
 agent-control-lab --sre-demo   # repeat until CIRCUIT OPEN
-agent-control-lab              # blocked
-agent-control-lab --sre-reset
+
+# Runtime kill switch
+agent-control-lab --kill-switch
+
+# Marketplace Ed25519
+agent-control-lab --marketplace-init
+agent-control-lab --marketplace-tamper
+agent-control-lab --marketplace-enforce
+agent-control-lab --marketplace-sign
 ```
-
-State: `output/sre_state.json`
-
-## Marketplace language
-
-Tools show **fingerprints** and trust labels (`catalogued` / `unknown`). These are not Ed25519 signatures.
 
 ## Docs
 
-- [AGT_SEVEN_LAYERS.md](AGT_SEVEN_LAYERS.md) — honest status table
-- [ADDING_AGENTS.md](ADDING_AGENTS.md) — extend the graph
+- [AGT_SEVEN_LAYERS.md](AGT_SEVEN_LAYERS.md)
+- [RUNTIME_MARKETPLACE_COMPLIANCE.md](RUNTIME_MARKETPLACE_COMPLIANCE.md)
+- [ADDING_AGENTS.md](ADDING_AGENTS.md)

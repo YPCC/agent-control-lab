@@ -6,23 +6,13 @@ This lab does **not** reimplement Microsoft’s seven packages. It makes governa
 
 | AGT concept | Status | What the code does |
 |-------------|--------|--------------------|
-| **Agent OS / ACS** | **Integrated** | `check_policy()` — LiteGovernor allow/deny; optional ACS at `PRE_TOOL_CALL` (`EVALUATE_ONLY`); **host** raises `PermissionError` and writes audit JSONL |
-| **Agent Mesh** | **Projected** | Deterministic `did:acl:…` + trust score/tier per agent node — **not** Ed25519 Mesh / IATP |
-| **Agent Runtime** | **Partial** | Action→ring map; ring 0 (destructive) denied; kill-switch helper — **not** a hypervisor/sandbox |
-| **Agent SRE** | **Partial** | **Persistent** `output/sre_state.json` window, error budget, circuit breaker across runs (`--sre-demo`) |
-| **Agent Compliance** | **Illustrative** | Compliance agent GO/NO-GO + light OWASP Agentic evidence mapping from denials |
-| **Agent Marketplace** | **Projected** | Tool **fingerprints** (SHA-256 of manifest id) + trust labels — **not** cryptographic signatures |
-| **Agent Lightning** | **Reference only** | Training-time RL governance boundary; not implemented here |
-
-## SRE circuit demo
-
-```bash
-agent-control-lab --sre-reset          # clear state
-agent-control-lab --sre-demo           # run 1: forced failure
-agent-control-lab --sre-demo           # … repeat until CIRCUIT OPEN
-agent-control-lab                      # blocked while open
-agent-control-lab --sre-reset          # recover
-```
+| **Agent OS / ACS** | **Integrated** | `check_policy()` — RuntimeGuard → LiteGovernor → optional ACS (`EVALUATE_ONLY`); **host** raises `PermissionError` + audit JSONL |
+| **Agent Mesh** | **Projected** | Deterministic `did:acl:…` + trust score/tier — **not** Ed25519 Mesh / IATP |
+| **Agent Runtime** | **Partial** | Privilege rings + **kill switch** wired into `check_policy` (`--kill-switch` / `AGT_KILL_SWITCH`) — **not** a hypervisor |
+| **Agent SRE** | **Partial** | Persistent `output/sre_state.json`, circuit breaker (`--sre-demo` / `--sre-reset`) |
+| **Agent Compliance** | **Illustrative** | GO/NO-GO agent + **audit →** `output/compliance_evidence.json` (light OWASP map) |
+| **Agent Marketplace** | **Projected** | Fingerprints always; **optional Ed25519** sign/verify (`--marketplace-init`, `--marketplace-enforce`) |
+| **Agent Lightning** | **Reference only** | Training-time RL boundary; not implemented here |
 
 ## Recommended claims
 
