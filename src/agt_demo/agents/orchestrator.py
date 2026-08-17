@@ -18,6 +18,8 @@ from agt_demo.agt_layers import (
     marketplace_catalog,
     SreMonitor,
     sre_state_path,
+    write_compliance_evidence,
+    get_runtime_guard,
 )
 
 
@@ -34,6 +36,10 @@ class OrchestratorState(TypedDict, total=False):
 
 class CircuitOpenError(RuntimeError):
     """Raised when SRE circuit breaker is open."""
+
+
+class MarketplaceRejectedError(RuntimeError):
+    """Raised when marketplace.enforce=true and a required tool fails verify."""
 
 
 def _make_node(agent_id: str, registry: AgentRegistry):
@@ -136,6 +142,8 @@ def run_orchestrator(
     init_langfuse()
     print_seven_layer_banner()
 
+    get_runtime_guard(cfg)
+
     sre = SreMonitor.load(sre_state_path(cfg), max_failures=5)
     print(
         f"[SRE] success_rate={sre.success_rate():.2%}  "
@@ -158,7 +166,13 @@ def run_orchestrator(
 
     compiled, registry, graph_spec = build_orchestrator_from_specs(cfg, graph_name)
     all_tools = sorted({t for a in registry.all() for t in a.tools})
-    marketplace_catalog(all_tools)
+    catalog = marketplace_catalog(all_tools, cfg=cfg)
+    rejected = [t.name for t in catalog if t.trust_tier == "rejected"]
+    if rejected and bool((cfg.get("marketplace") or {}).get("enforce", False)):
+        raise MarketplaceRejectedError(
+            f"Marketplace enforce: rejected tools {rejected}. "
+            "Re-sign catalog or set marketplace.enforce: false"
+        )
 
     with trace_run(
         name="agent-control-lab-run",
@@ -189,6 +203,12 @@ def run_orchestrator(
             f"circuit_open={sre.circuit_open}  "
             f"window_failures={sre.window.count(False)}/{len(sre.window)}"
         )
+
+        try:
+            write_compliance_evidence(cfg)
+        except Exception as e:
+            print(f"  [Compliance] evidence write skipped: {e}")
+
         log_event(
             lf_trace,
             "orchestrator_done",
