@@ -22,9 +22,9 @@ Agent Control Lab has **two architectural planes**: an **agent execution plane**
 | **Agent execution plane** | Spec-driven LangGraph workflow: `knowledge → critic → compliance` |
 | **Governance control plane** | Policy mediation, identity/trust, runtime rings + kill switch, SRE circuit, marketplace trust, audit/telemetry |
 
-![C4 context, container, and 7-layer AGT concept map](docs/architecture/c4-and-seven-layer-map.jpg)
+![C4 context, container, and 7-layer AGT concept map](docs/architecture/c4-and-seven-layer-map.svg)
 
-*Figure: (1) C4 context — developer ↔ lab ↔ LLM providers, Microsoft AGT, Langfuse. (2) C4 container — specification layer, orchestrator, execution agents, and governance control plane. (3) Logical 7-layer concept map over the multi-agent workflow.*
+*Figure: execution plane (Knowledge → Critic → Compliance) under a governance control plane spanning the seven AGT concept layers, with honest status tags.*
 
 ### Execution plane (LangGraph)
 
@@ -215,7 +215,7 @@ agent-control-lab
 | Doc | Topic |
 |-----|--------|
 | [docs/QUICKSTART.md](docs/QUICKSTART.md) | First run |
-| [docs/architecture/README.md](docs/architecture/README.md) | Two-plane architecture + C4 figure |
+| [docs/architecture/README.md](docs/architecture/README.md) | Two-plane architecture + figure |
 | [docs/AGT_SEVEN_LAYERS.md](docs/AGT_SEVEN_LAYERS.md) | Honest 7-layer map |
 | [docs/RUNTIME_MARKETPLACE_COMPLIANCE.md](docs/RUNTIME_MARKETPLACE_COMPLIANCE.md) | Kill switch, evidence, Ed25519 |
 | [docs/ADDING_AGENTS.md](docs/ADDING_AGENTS.md) | Spec-driven agents |
